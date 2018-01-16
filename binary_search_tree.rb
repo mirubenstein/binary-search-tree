@@ -6,6 +6,7 @@ class Bst
   def initialize(data)
     @data = data
     @size = 1
+    @children = {}
   end
 
   def each(&block)
@@ -17,20 +18,17 @@ class Bst
   end
 
   def insert(other)
-    if other <= data
-      @left = Bst.new(other) unless @left&.insert(other)
-    else
-      @right = Bst.new(other) unless @right&.insert(other)
-    end
+    side = (other <= data) ? :left : :right
+    @children[side] = Bst.new(other) unless @children[side]&.insert(other)
     @size += 1
   end
 
   def left
-    @left.dup.freeze
+    @children[:left].dup.freeze
   end
 
   def right
-    @right.dup.freeze
+    @children[:right].dup.freeze
   end
 end
 
@@ -39,6 +37,8 @@ module BookKeeping
   VERSION = 1
 end
 
+# Allow create empty trees
+#
 # If you want a good challenge, than try implementing a BST with object type polymorphism
 # to get rid of the explicit branching entirely.
 #   I am not sure if it would lead to great code here, but it's an interesting exercise in OO.
